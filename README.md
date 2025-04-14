@@ -12,6 +12,7 @@ Ce projet a pour but d'importer, structurer, nettoyer et analyser des données d
 
 ## 1️⃣ Création de la base de données
 
+On commence par créer une base de données "linkedin".
 ```sql
 CREATE DATABASE linkedin;  --  Création de la base de données "linkedin".
 USE DATABASE linkedin; -- On spécifie la base de données courante de la session.
@@ -23,12 +24,14 @@ USE DATABASE linkedin; -- On spécifie la base de données courante de la sessio
 
 ### 📦 Création du stage (accès au bucket S3)
 
+On crée un stage pour spécifier l'emplacement des fichiers de données
 ```sql
 CREATE STAGE lab_bucket URL = 's3://snowflake-lab-bucket/';    -- On spécifie où se situent les fichiers à importer
 ```
 
 ### 📂 Vérification du contenu du bucket
 
+On vérifie que tous les fichiers sont bien présents là où on l'a spécifié
 ```sql
 LIST @lab_bucket;
 ```
@@ -39,6 +42,8 @@ On obtient la liste des fichiers présents dans le bucket S3.
 
 ### 🧾 Création des formats de fichiers
 
+On crée différents formats de fichiers pour importer les fichiers de données qui présentent des types et des délimiteurs différents. 
+Ils n'ont pas tous la même structure
 ```sql
 CREATE OR REPLACE FILE FORMAT csv
   TYPE = 'CSV'
@@ -61,12 +66,11 @@ CREATE OR REPLACE FILE FORMAT json
   STRIP_OUTER_ARRAY = TRUE;
 ```
 
-Les fichiers à charger n'ont pas tous la même structure (délimiteur `,` ou `;`, JSON array, etc.).
-
-
 ---
 ## 3️⃣ Création des tables
 
+On crée toutes les tables qui vont accueillir nos données par la suite.
+On prend soin de bien définir les bons types de données pour chaque colonne.
 ```sql
 CREATE TABLE Jobs_posting (
     job_id STRING,
@@ -143,24 +147,74 @@ CREATE TABLE Company_industries (
 
 ## 4️⃣ Chargement des données depuis S3
 
-### 📥 Exemple de commande utilisée
-
+On insère nos données dans les tables que l'on vient de créer.
 ```sql
-COPY INTO Jobs_posting
-FROM @lab_bucket/jobs_postings.json
-FILE_FORMAT = (FORMAT_NAME = json)
+COPY INTO Benefits
+FROM @lab_bucket/benefits.csv
+FILE_FORMAT = csv;
+
+COPY INTO Companies
+FROM @lab_bucket/companies.json
+FILE_FORMAT = json
 MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+
+COPY INTO Company_industries
+FROM @lab_bucket/company_industries.json
+FILE_FORMAT = json
+MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+
+COPY INTO Company_specialities
+FROM @lab_bucket/company_specialities.json
+FILE_FORMAT = json
+MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+
+COPY INTO Employee_counts
+FROM @lab_bucket/employee_counts.csv
+FILE_FORMAT = csv;
+
+COPY INTO Industries
+FROM @lab_bucket/industries.json
+FILE_FORMAT = json
+MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+
+COPY INTO Job_Industries
+FROM @lab_bucket/job_industries.json
+FILE_FORMAT = json
+MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+
+COPY INTO Jobs_posting
+FROM @lab_bucket/job_postings.csv
+FILE_FORMAT = csv_2;
+
+COPY INTO Job_Skills
+FROM @lab_bucket/job_skills.csv
+FILE_FORMAT = csv;
+
+COPY INTO Salaries
+FROM @lab_bucket/salaries.csv
+FILE_FORMAT = csv;
+
+COPY INTO Skills
+FROM @lab_bucket/skills.csv
+FILE_FORMAT = csv;
+
 ```
 
 ### ⚠️ Problèmes rencontrés
 
-| Problème | Solution |
-|---------|----------|
-| ❌ Erreur JSON ("one and only one column") | ✅ `STRIP_OUTER_ARRAY = TRUE` |
-| ❌ Mauvais mapping de colonnes | ✅ `MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE` |
-| ❌ Données hybrides dans `no_of_employ` | ✅ `SPLIT_PART` |
-| ❌ Données erronées dans `full_time_remote` | ✅ Nettoyage via `CASE` |
-| ❌ Champs vides à interpréter comme NULL | ✅ `EMPTY_FIELD_AS_NULL = TRUE` |
+Voici une version plus détaillée et claire de la section **"⚠️ Problèmes rencontrés"**, avec explications techniques pour chaque cas :
+
+---
+
+### ⚠️ Problèmes rencontrés et solutions apportées
+
+| **Problème** | **Détail** | **Solution** |
+|--------------|------------|--------------|
+| ❌ **Erreur JSON : `one and only one column`** | Lors du chargement de fichiers JSON contenant des tableaux d'objets, Snowflake renvoie cette erreur si le format n’est pas correctement défini. Cela se produit notamment lorsque le fichier JSON commence par `[` et contient plusieurs objets. | ✅ **Ajout de `STRIP_OUTER_ARRAY = TRUE`** dans le `FILE FORMAT` JSON pour indiquer que les données sont dans un tableau et doivent être traitées ligne par ligne. |
+| ❌ **Mauvais mapping des colonnes lors du `COPY INTO`** | Si les noms des colonnes dans le fichier source ne correspondent pas exactement (casse, ordre, etc.) aux noms des colonnes dans la table cible, le chargement échoue ou les colonnes sont mal alignées. | ✅ Ajout de l’option **`MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE`** pour ignorer la casse et s’assurer que les noms sont correctement associés. |
+| ❌ **Données hybrides dans la colonne `no_of_employ`** | Cette colonne contient des chaînes de type `"11-50 employees"`, ce qui empêche une analyse directe des tailles. | ✅ Utilisation de **`SPLIT_PART(no_of_employ, ' ', 1)`** ou **`SUBSTRING` + `CHARINDEX`** pour extraire uniquement la plage `"11-50"`. |
+| ❌ **Valeurs erronées dans `full_time_remote`** | Cette colonne contient parfois des données qui ne sont pas des types d’emploi (ex : des tailles d’entreprises comme `"11-50 employees"`). | ✅ Nettoyage avec une clause **`CASE WHEN`** pour filtrer uniquement les valeurs `"Full-time"`, `"Contract"`, `"Part-time"` et `"Internship"`, et exclure les autres. |
+| ❌ **Champs vides interprétés comme chaîne vide au lieu de NULL** | Certaines valeurs manquantes sont des chaînes vides (`""`) ou `"NULL"` écrit en dur, ce qui fausse les analyses. | ✅ Utilisation de **`EMPTY_FIELD_AS_NULL = TRUE`** et **`NULL_IF = ('\\N', 'NULL')`** dans les `FILE FORMAT` pour forcer ces champs à être reconnus comme NULL. |
 
 ---
 
