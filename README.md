@@ -13,11 +13,9 @@ Ce projet a pour but d'importer, structurer, nettoyer et analyser des données d
 ## 1️⃣ Création de la base de données
 
 ```sql
-CREATE DATABASE linkedin;
+CREATE DATABASE linkedin;  --  Création de la base de données "linkedin".
 USE DATABASE linkedin; -- On spécifie la base de données courante de la session.
 ```
-
-🎯 *Objectif* : définir une base dédiée à notre projet.
 
 ---
 
@@ -34,9 +32,6 @@ CREATE STAGE lab_bucket URL = 's3://snowflake-lab-bucket/';    -- On spécifie l
 ```sql
 LIST @lab_bucket;
 ```
-
-🎯 *But* : S'assurer que les fichiers sont accessibles depuis Snowflake.
-
 ---
 
 ### 🧾 Création des formats de fichier
