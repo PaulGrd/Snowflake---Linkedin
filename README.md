@@ -319,6 +319,11 @@ Voici les visualisations réalisées à partir des analyses SQL, intégrées dan
 
 ---
 
+⚠️ Il faut installer les packages "matplotlib" et "pandas" avant d'exécuter le code.
+<img width="437" alt="image" src="https://github.com/user-attachments/assets/6837d3ce-67b8-40bc-b90c-728fa50012d8" />
+
+---
+
 ### 📌 1. Top 10 des jobs par industrie (filtrable)
 
 ```python
