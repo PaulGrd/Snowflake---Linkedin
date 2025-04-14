@@ -224,37 +224,7 @@ FILE_FORMAT = csv;
 
 ---
 
-## 5️⃣ Nettoyage & Transformation
-
-### 🧹 Extraction des valeurs clés
-
-#### 🔍 Taille d’entreprise et industrie
-```sql
-SELECT
-  TRIM(SPLIT_PART(no_of_employ, '·', 2)) AS industry,
-  TRIM(SPLIT_PART(no_of_employ, ' employees', 1)) AS employee_range
-FROM Jobs_posting
-WHERE no_of_employ IS NOT NULL;
-```
-
-🎯 *But* : Séparer deux informations mal structurées dans une seule colonne.
-
----
-
-#### 🔍 Normalisation des types de contrat
-```sql
-CASE 
-  WHEN full_time_remote LIKE 'Full-time%' THEN 'Full-time'
-  WHEN full_time_remote LIKE 'Internship%' THEN 'Internship'
-  WHEN full_time_remote LIKE 'Contract%' THEN 'Contract'
-  ELSE 'Other'
-```
-
-🎯 *But* : Nettoyer les combinaisons incohérentes type `Contract · Remote`.
-
----
-
-## 6️⃣ Analyses SQL effectuées
+## 5️⃣ Analyses SQL effectuées
 
 ### ✅ 1. Top 10 des jobs par industrie
 
@@ -343,7 +313,7 @@ ORDER BY nb_postings DESC;
 
 ---
 
-## 7️⃣ Visualisations avec Streamlit
+## 6️⃣ Visualisations avec Streamlit
 
 Voici les visualisations réalisées à partir des analyses SQL, intégrées dans une app Streamlit.
 
