@@ -221,6 +221,7 @@ Voici les visualisations réalisées à partir des analyses SQL, intégrées dan
 ---
 
 ### 📌 1. Top 10 des jobs par industrie (filtrable)
+<img width="787" alt="image" src="https://github.com/user-attachments/assets/38b4956a-2600-47f2-ab9a-111678f34319" />
 
 ```python
 selected_industry = st.selectbox("Sélectionnez une industrie", industries)
@@ -245,6 +246,7 @@ st.bar_chart(df, x="JOB", y="JOB_COUNT")
 ---
 
 ### 📌 2. Répartition par taille d’entreprise
+<img width="776" alt="image" src="https://github.com/user-attachments/assets/4863a74e-b16b-4791-b714-243e2deafce0" />
 
 ```python
 query = """
@@ -264,6 +266,7 @@ st.bar_chart(df, x="EMPLOYEE_RANGE", y="NB_POSTINGS")
 ---
 
 ### 📌 3. Répartition Remote / On-site
+<img width="751" alt="image" src="https://github.com/user-attachments/assets/8087d93a-085b-42f6-85b8-bddf47bfb50a" />
 
 ```python
 query = """
@@ -281,6 +284,7 @@ st.plotly_chart(px.pie(df, values="COUNT", names="WORK_TYPE", title="Présence")
 ---
 
 ### 📌 4. Répartition par type d’emploi
+<img width="765" alt="image" src="https://github.com/user-attachments/assets/1c3d7069-20bd-4dcd-8aaa-c5f1a9bcd3f3" />
 
 ```python
 query = """
