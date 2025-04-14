@@ -281,6 +281,8 @@ WHERE rn <= 10
 
 ORDER BY job_count DESC
 ```
+<img width="935" alt="image" src="https://github.com/user-attachments/assets/bb8fb0cd-7838-4a21-ac3a-7273caec7d63" />
+
 
 ---
 
@@ -295,6 +297,8 @@ WHERE no_of_employ IS NOT NULL
 GROUP BY employee_range
 ORDER BY nb_postings DESC;
 ```
+<img width="943" alt="image" src="https://github.com/user-attachments/assets/c04beb02-4c51-4071-a427-a0f6d96b7557" />
+
 
 ---
 
@@ -311,6 +315,8 @@ SELECT
 FROM Jobs_posting
 GROUP BY full_time_remote;
 ```
+<img width="939" alt="image" src="https://github.com/user-attachments/assets/d3b0935c-60c4-404a-9568-d71bf3927d8c" />
+
 
 ---
 
@@ -332,12 +338,14 @@ AND full_time_remote NOT IN ('1-10 employees', '11-50 employees')
 GROUP BY employment_type
 ORDER BY nb_postings DESC;
 ```
+<img width="939" alt="image" src="https://github.com/user-attachments/assets/88fa5ba8-43b2-49a5-aeff-eed43a809d0d" />
+
 
 ---
 
 ## 7️⃣ Visualisations avec Streamlit
 
-Voici les visualisations réalisées à partir des analyses SQL, intégrées dans une app interactive.
+Voici les visualisations réalisées à partir des analyses SQL, intégrées dans une app Streamlit.
 
 ---
 
@@ -366,7 +374,7 @@ st.bar_chart(df, x="JOB", y="JOB_COUNT")
 <img width="787" alt="image" src="https://github.com/user-attachments/assets/38b4956a-2600-47f2-ab9a-111678f34319" />
 ---
 
-### 📌 2. Répartition par taille d’entreprise
+### 📌 2. Répartition des offres d'emploi par taille d’entreprise
 
 ```python
 query = """
@@ -387,7 +395,7 @@ st.bar_chart(df, x="EMPLOYEE_RANGE", y="NB_POSTINGS")
 
 <img width="776" alt="image" src="https://github.com/user-attachments/assets/4863a74e-b16b-4791-b714-243e2deafce0" />
 
-### 📌 3. Répartition Remote / On-site
+### 📌 3. Répartition des offres d'emploi par type de présence
 
 ```python
 query = """
@@ -406,7 +414,7 @@ st.plotly_chart(px.pie(df, values="COUNT", names="WORK_TYPE", title="Présence")
 
 <img width="751" alt="image" src="https://github.com/user-attachments/assets/8087d93a-085b-42f6-85b8-bddf47bfb50a" />
 
-### 📌 4. Répartition par type d’emploi
+### 📌 4. Répartition des offres d'emploi par type d’emploi
 
 ```python
 query = """
