@@ -34,6 +34,10 @@ LIST @lab_bucket;
 ```
 ---
 
+On obtient la liste des fichiers présents dans le bucket S3.
+<img width="942" alt="image" src="https://github.com/user-attachments/assets/fb891f1e-a94a-4159-aee3-b227915c8b84" />
+
+
 ### 🧾 Création des formats de fichier
 
 ```sql
