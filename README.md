@@ -44,7 +44,7 @@ On obtient la liste des fichiers présents dans le bucket S3.
 ### 🧾 Création des formats de fichiers
 
 On crée différents formats de fichiers pour importer les fichiers de données qui présentent des types et des délimiteurs différents. 
-Ils n'ont pas tous la même structure
+Ils n'ont pas tous la même structure.
 ```sql
 CREATE OR REPLACE FILE FORMAT csv
   TYPE = 'CSV'
