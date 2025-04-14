@@ -199,17 +199,6 @@ FROM @lab_bucket/skills.csv
 FILE_FORMAT = csv;
 
 ```
----
-
-### ⚠️ Problèmes rencontrés et solutions apportées
-
-| **Problème** | **Détail** | **Solution** |
-|--------------|------------|--------------|
-| ❌ **Erreur JSON : `one and only one column`** | Lors du chargement de fichiers JSON contenant des tableaux d'objets, Snowflake renvoie cette erreur si le format n’est pas correctement défini. Cela se produit notamment lorsque le fichier JSON commence par `[` et contient plusieurs objets. | ✅ **Ajout de `STRIP_OUTER_ARRAY = TRUE`** dans le `FILE FORMAT` JSON pour indiquer que les données sont dans un tableau et doivent être traitées ligne par ligne. |
-| ❌ **Mauvais mapping des colonnes lors du `COPY INTO`** | Si les noms des colonnes dans le fichier source ne correspondent pas exactement (casse, ordre, etc.) aux noms des colonnes dans la table cible, le chargement échoue ou les colonnes sont mal alignées. | ✅ Ajout de l’option **`MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE`** pour ignorer la casse et s’assurer que les noms sont correctement associés. |
-| ❌ **Données hybrides dans la colonne `no_of_employ`** | Cette colonne contient des chaînes de type `"11-50 employees"`, ce qui empêche une analyse directe des tailles. | ✅ Utilisation de **`SPLIT_PART(no_of_employ, ' ', 1)`** ou **`SUBSTRING` + `CHARINDEX`** pour extraire uniquement la plage `"11-50"`. |
-| ❌ **Valeurs erronées dans `full_time_remote`** | Cette colonne contient parfois des données qui ne sont pas des types d’emploi (ex : des tailles d’entreprises comme `"11-50 employees"`). | ✅ Nettoyage avec une clause **`CASE WHEN`** pour filtrer uniquement les valeurs `"Full-time"`, `"Contract"`, `"Part-time"` et `"Internship"`, et exclure les autres. |
-| ❌ **Champs vides interprétés comme chaîne vide au lieu de NULL** | Certaines valeurs manquantes sont des chaînes vides (`""`) ou `"NULL"` écrit en dur, ce qui fausse les analyses. | ✅ Utilisation de **`EMPTY_FIELD_AS_NULL = TRUE`** et **`NULL_IF = ('\\N', 'NULL')`** dans les `FILE FORMAT` pour forcer ces champs à être reconnus comme NULL. |
 
 ---
 
@@ -423,13 +412,16 @@ st.plotly_chart(px.pie(df, values="COUNT", names="TYPE_EMPLOI", title="Type d’
 
 <img width="765" alt="image" src="https://github.com/user-attachments/assets/1c3d7069-20bd-4dcd-8aaa-c5f1a9bcd3f3" />
 
-## 🧠 Conclusion
+---
 
-Ce projet nous a permis de :
+### ⚠️ Problèmes rencontrés et solutions apportées
 
-- Mettre en œuvre une pipeline d’analyse de données dans Snowflake.
-- Manipuler et nettoyer des données hétérogènes et partiellement structurées.
-- Résoudre plusieurs problèmes courants liés aux formats (CSV, JSON, délimiteurs).
-- Créer un dashboard interactif clair et ergonomique.
+| **Problème** | **Détail** | **Solution** |
+|--------------|------------|--------------|
+| ❌ **Erreur JSON : `one and only one column`** | Lors du chargement de fichiers JSON contenant des tableaux d'objets, Snowflake renvoie cette erreur si le format n’est pas correctement défini. Cela se produit notamment lorsque le fichier JSON commence par `[` et contient plusieurs objets. | ✅ **Ajout de `STRIP_OUTER_ARRAY = TRUE`** dans le `FILE FORMAT` JSON pour indiquer que les données sont dans un tableau et doivent être traitées ligne par ligne. |
+| ❌ **Mauvais mapping des colonnes lors du `COPY INTO`** | Si les noms des colonnes dans le fichier source ne correspondent pas exactement (casse, ordre, etc.) aux noms des colonnes dans la table cible, le chargement échoue ou les colonnes sont mal alignées. | ✅ Ajout de l’option **`MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE`** pour ignorer la casse et s’assurer que les noms sont correctement associés. |
+| ❌ **Données hybrides dans la colonne `no_of_employ`** | Cette colonne contient des chaînes de type `"11-50 employees"`, ce qui empêche une analyse directe des tailles. | ✅ Utilisation de **`SPLIT_PART(no_of_employ, ' ', 1)`** ou **`SUBSTRING` + `CHARINDEX`** pour extraire uniquement la plage `"11-50"`. |
+| ❌ **Valeurs erronées dans `full_time_remote`** | Cette colonne contient parfois des données qui ne sont pas des types d’emploi (ex : des tailles d’entreprises comme `"11-50 employees"`). | ✅ Nettoyage avec une clause **`CASE WHEN`** pour filtrer uniquement les valeurs `"Full-time"`, `"Contract"`, `"Part-time"` et `"Internship"`, et exclure les autres. |
+| ❌ **Champs vides interprétés comme chaîne vide au lieu de NULL** | Certaines valeurs manquantes sont des chaînes vides (`""`) ou `"NULL"` écrit en dur, ce qui fausse les analyses. | ✅ Utilisation de **`EMPTY_FIELD_AS_NULL = TRUE`** et **`NULL_IF = ('\\N', 'NULL')`** dans les `FILE FORMAT` pour forcer ces champs à être reconnus comme NULL. |
 
 ---
