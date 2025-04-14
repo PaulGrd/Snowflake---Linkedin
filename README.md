@@ -1,7 +1,5 @@
-# Snowflake - Linkedin
-Rendu de projet - Paul GIRAUD / Martin MORIN
-
 # 📊 Analyse des Offres d'Emploi LinkedIn avec Snowflake
+Paul GIRAUD / Martin MORIN
 
 ## 🚀 Objectif
 
