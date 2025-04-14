@@ -149,16 +149,27 @@ CASE
 ### ✅ 1. Top 10 des jobs par industrie
 
 ```sql
-SELECT 
-  i.industry_name,
-  jp.job,
-  COUNT(*) AS nb_postings
-FROM Jobs_posting jp
-JOIN Job_Industries ji ON jp.job_ID = ji.job_id
-JOIN Industries i ON ji.industry_id = i.industry_id
-GROUP BY i.industry_name, jp.job
-ORDER BY nb_postings DESC
-LIMIT 10;
+SELECT
+    industry,
+    job,
+    job_count
+
+FROM (
+
+    SELECT
+        ci.industry,
+        jp.job,
+        COUNT(*) AS job_count,
+        ROW_NUMBER() OVER (PARTITION BY ci.industry ORDER BY COUNT(*) DESC) AS rn
+    FROM jobs_posting jp
+    LEFT JOIN company_industries ci ON ci.company_id = jp.company_id
+    GROUP BY ci.industry, jp.job
+
+) sub
+
+WHERE rn <= 10
+
+ORDER BY job_count DESC
 ```
 
 ---
