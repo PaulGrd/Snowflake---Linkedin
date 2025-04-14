@@ -73,73 +73,94 @@ CREATE OR REPLACE FILE FORMAT json
 On crée toutes les tables qui vont accueillir nos données par la suite.
 On prend soin de bien définir les bons types de données pour chaque colonne.
 ```sql
-CREATE TABLE Jobs_posting (
-    job_id STRING,
-    company_id STRING,
+-- Création des tables
+CREATE OR REPLACE TABLE Jobs_posting (
+    job_ID STRING PRIMARY KEY,
     job STRING,
-    work_type STRING,
     location STRING,
-    job_description STRING,
-    full_time_remote STRING,
-    no_of_employ STRING,
-    company_name STRING
-);
-
-CREATE TABLE Salaries (
-    job_id STRING,
-    salary_estimate STRING
-);
-
-CREATE TABLE Benefits (
-    job_id STRING,
-    benefits STRING
-);
-
-CREATE TABLE Companies (
     company_id STRING,
     company_name STRING,
-    company_website STRING,
-    headquarters STRING,
-    company_size STRING,
-    company_founded STRING,
-    company_type STRING,
-    company_industry STRING,
-    company_revenue STRING
+    work_type STRING,
+    full_time_remote STRING,
+    no_of_employ STRING,
+    no_of_application STRING,
+    posted_day_ago STRING,
+    alumni STRING,
+    Hiring_person STRING,
+    linkedin_followers STRING,
+    hiring_person_link STRING,
+    job_details STRING
 );
 
-CREATE TABLE Skills (
-    skill_id STRING,
-    skill STRING
+CREATE OR REPLACE TABLE Salaries (
+    salary_id STRING PRIMARY KEY,
+    job_id STRING REFERENCES Jobs_posting(job_ID),
+    max_salary NUMBER,
+    med_salary NUMBER,
+    min_salary NUMBER,
+    pay_period STRING,
+    currency STRING,
+    compensation_type STRING
 );
 
-CREATE TABLE Employee_counts (
-    company_id STRING,
-    employee_count STRING
+CREATE OR REPLACE TABLE Benefits (
+    job_id STRING REFERENCES Jobs_posting(job_ID),
+    type STRING,
+    inferred STRING
 );
 
-CREATE TABLE Job_Skills (
-    job_id STRING,
-    skill_id STRING
+CREATE OR REPLACE TABLE Companies (
+    company_id STRING PRIMARY KEY,
+    name STRING,
+    description STRING,
+    company_size NUMBER(1),
+    country STRING,
+    state STRING,
+    city STRING,
+    zip_code STRING,
+    address STRING,
+    url STRING
 );
 
-CREATE TABLE Industries (
-    industry_id STRING,
-    industry STRING
+CREATE OR REPLACE TABLE Skills (
+    skill_abr STRING PRIMARY KEY,
+    skill_name STRING
 );
 
-CREATE TABLE Job_Industries (
-    job_id STRING,
-    industry_id STRING
+CREATE OR REPLACE TABLE Employee_counts (
+    company_id STRING REFERENCES Companies(company_id),
+    employee_count INTEGER,
+    follower_count INTEGER,
+    time_recorded FLOAT
 );
 
-CREATE TABLE Company_specialities (
-    company_id STRING,
-    speciality STRING
+CREATE OR REPLACE TABLE Job_Skills (
+    job_id STRING REFERENCES Jobs_posting(job_ID),
+    skill_abr STRING REFERENCES Skills(skill_abr),
+    PRIMARY KEY (job_id, skill_abr)
 );
 
-CREATE TABLE Company_industries (
-    company_id STRING,
-    industry STRING
+CREATE OR REPLACE TABLE Industries (
+    industry_id STRING PRIMARY KEY,
+    industry_name STRING
+);
+
+CREATE OR REPLACE TABLE Job_Industries (
+    job_id STRING REFERENCES Jobs_posting(job_ID),
+    industry_id STRING REFERENCES Industries(industry_id),
+    PRIMARY KEY (job_id, industry_id)
+);
+
+CREATE OR REPLACE TABLE Company_specialities (
+    company_id STRING REFERENCES Companies(company_id),
+    speciality STRING,
+    PRIMARY KEY (company_id, speciality)
+);
+
+CREATE OR REPLACE TABLE Company_industries (
+    company_id STRING REFERENCES Companies(company_id),
+    industry STRING REFERENCES Industries(industry_id),
+    PRIMARY KEY (company_id, industry)
 );
 
 ```
