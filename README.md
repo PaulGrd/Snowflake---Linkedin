@@ -12,6 +12,7 @@ Ce projet a pour but d'importer, structurer, nettoyer et analyser des données d
 
 ## 1️⃣ Création de la base de données
 
+On ouvre un SQL Worksheet.
 On commence par créer une base de données "linkedin".
 ```sql
 CREATE DATABASE linkedin;  --  Création de la base de données "linkedin".
