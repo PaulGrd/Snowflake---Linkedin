@@ -24,7 +24,7 @@ USE DATABASE linkedin; -- On spécifie la base de données courante de la sessio
 ### 📦 Création du stage (accès au bucket S3)
 
 ```sql
-CREATE STAGE lab_bucket URL = 's3://snowflake-lab-bucket/';    -- On spécifie le chemin des fichiers à importer
+CREATE STAGE lab_bucket URL = 's3://snowflake-lab-bucket/';    -- On spécifie où se situent les fichiers à importer
 ```
 
 ### 📂 Vérification du contenu du bucket
