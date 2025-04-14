@@ -2,6 +2,7 @@
 
 **Auteurs** : Paul GIRAUD / Martin MORIN
 
+Les fichiers de code SQL / Streamlit sont disponibles sur ce même repo GitHub : "linkedin
 ---
 
 ## 🚀 Objectif
