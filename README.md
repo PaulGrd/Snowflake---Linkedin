@@ -199,11 +199,6 @@ FROM @lab_bucket/skills.csv
 FILE_FORMAT = csv;
 
 ```
-
-### ⚠️ Problèmes rencontrés
-
-Voici une version plus détaillée et claire de la section **"⚠️ Problèmes rencontrés"**, avec explications techniques pour chaque cas :
-
 ---
 
 ### ⚠️ Problèmes rencontrés et solutions apportées
