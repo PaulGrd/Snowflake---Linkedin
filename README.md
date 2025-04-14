@@ -1,5 +1,5 @@
 # 📊 Analyse des Offres d'Emploi LinkedIn avec Snowflake
-Paul GIRAUD / Martin MORIN
+Auteurs : Paul GIRAUD / Martin MORIN
 
 ## 🚀 Objectif
 
