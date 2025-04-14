@@ -21,7 +21,7 @@ USE DATABASE linkedin; -- On spécifie la base de données courante de la sessio
 
 ---
 
-## 3️⃣ Création du stage & des formats de fichiers
+## 2️⃣ Création du stage & des formats de fichiers
 
 ### 📦 Création du stage (accès au bucket S3)
 
@@ -67,7 +67,7 @@ Les fichiers à charger n'ont pas tous la même structure (délimiteur `,` ou `;
 
 
 ---
-## 2️⃣ Création du schéma relationnel
+## 3️⃣ Création du schéma relationnel
 
 ### 📘 Tables créées
 
