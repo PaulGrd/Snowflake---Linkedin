@@ -1,11 +1,6 @@
 # Snowflake - Linkedin
 Rendu de projet - Paul GIRAUD / Martin MORIN
 
-Voici ton `README.md` tout propre, prêt à copier-coller dans ton repo GitHub 💾 :
-
----
-
-```markdown
 # 📊 Analyse des Offres d'Emploi LinkedIn avec Snowflake
 
 ## 🚀 Objectif
