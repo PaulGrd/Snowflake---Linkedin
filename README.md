@@ -67,27 +67,79 @@ Les fichiers à charger n'ont pas tous la même structure (délimiteur `,` ou `;
 
 
 ---
-## 3️⃣ Création du schéma relationnel
-
-### 📘 Tables créées
+## 3️⃣ Création des tables
 
 ```sql
-CREATE TABLE Jobs_posting (...);
-CREATE TABLE Salaries (...);
-CREATE TABLE Benefits (...);
-CREATE TABLE Companies (...);
-CREATE TABLE Skills (...);
-CREATE TABLE Employee_counts (...);
-CREATE TABLE Job_Skills (...);
-CREATE TABLE Industries (...);
-CREATE TABLE Job_Industries (...);
-CREATE TABLE Company_specialities (...);
-CREATE TABLE Company_industries (...);
-```
+CREATE TABLE Jobs_posting (
+    job_id STRING,
+    company_id STRING,
+    job STRING,
+    work_type STRING,
+    location STRING,
+    job_description STRING,
+    full_time_remote STRING,
+    no_of_employ STRING,
+    company_name STRING
+);
 
-👉 *Commentaires* :
-- Clés primaires / étrangères créées pour assurer la cohérence.
-- Structure pensée pour représenter les relations **N:N** (ex : `Job_Skills`).
+CREATE TABLE Salaries (
+    job_id STRING,
+    salary_estimate STRING
+);
+
+CREATE TABLE Benefits (
+    job_id STRING,
+    benefits STRING
+);
+
+CREATE TABLE Companies (
+    company_id STRING,
+    company_name STRING,
+    company_website STRING,
+    headquarters STRING,
+    company_size STRING,
+    company_founded STRING,
+    company_type STRING,
+    company_industry STRING,
+    company_revenue STRING
+);
+
+CREATE TABLE Skills (
+    skill_id STRING,
+    skill STRING
+);
+
+CREATE TABLE Employee_counts (
+    company_id STRING,
+    employee_count STRING
+);
+
+CREATE TABLE Job_Skills (
+    job_id STRING,
+    skill_id STRING
+);
+
+CREATE TABLE Industries (
+    industry_id STRING,
+    industry STRING
+);
+
+CREATE TABLE Job_Industries (
+    job_id STRING,
+    industry_id STRING
+);
+
+CREATE TABLE Company_specialities (
+    company_id STRING,
+    speciality STRING
+);
+
+CREATE TABLE Company_industries (
+    company_id STRING,
+    industry STRING
+);
+
+```
 
 ---
 
